@@ -5,6 +5,18 @@ DROP TABLE IF EXISTS "orders";
 DROP TABLE IF EXISTS "MariiaProducts";
 DROP TABLE IF EXISTS "group";
 DROP TABLE IF EXISTS "users";
+CREATE TABLE "users"(
+    "id" SERIAL PRIMARY KEY,
+    "firstName" VARCHAR(64) NOT NULL CHECK("firstName" != ''),
+    "lastName" VARCHAR(128) NOT NULL CHECK("lastName" != ''),
+    "email" VARCHAR(256) NOT NULL CHECK("email" != '') UNIQUE,
+    "isMale" BOOLEAN NOT NULL,
+    "birthday" DATE NOT NULL CHECK("birthday" < CURRENT_DATE),
+    "height" NUMERIC(3, 2) NOT NULL CHECK(
+        "height" > 1.10
+        AND "height" < 2.55
+    )
+);
 INSERT INTO "users" (
         "firstName",
         "lastName",
@@ -62,18 +74,6 @@ INSERT INTO "MariiaProducts" ("name", "price")
 VALUES ('Milk', '24.90'),
     ('Feed', '16.90'),
     ('Flour', '50.40');
-CREATE TABLE "users"(
-    "id" SERIAL PRIMARY KEY,
-    "firstName" VARCHAR(64) NOT NULL CHECK("firstName" != ''),
-    "lastName" VARCHAR(128) NOT NULL CHECK("lastName" != ''),
-    "email" VARCHAR(256) NOT NULL CHECK("email" != '') UNIQUE,
-    "isMale" BOOLEAN NOT NULL,
-    "birthday" DATE NOT NULL CHECK("birthday" < CURRENT_DATE),
-    "height" NUMERIC(3, 2) NOT NULL CHECK(
-        "height" > 1.10
-        AND "height" < 2.55
-    )
-);
 CREATE TABLE "orders"(
     "id" SERIAL PRIMARY KEY,
     "userId" INTEGER REFERENCES "users"("id"),
@@ -112,7 +112,7 @@ INSERT INTO "users_to_group"
 VALUES (1, 1),
     (1, 2),
     (1, 3),
-(2, 1);
+    (2, 1);
 CREATE TABLE "messages"(
     "id" SERIAL PRIMARY KEY,
     "body" VARCHAR(4096) CHECK("body" != '') NOT NULL,
